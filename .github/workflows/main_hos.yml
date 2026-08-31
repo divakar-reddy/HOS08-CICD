@@ -18,22 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: .
 
   deploy:
     runs-on: windows-latest
@@ -47,13 +36,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6C6C752E224A4968BADB9461E8AB65EE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0F1782FDB12149319313208CB4485F2F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FD2512D1DD6F4F41BAF172AE98F3C9A0 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_24AA246C485B4956B1712FF75488428E }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_01A7D9C45F714B709B29887E4F1E45B6 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_34D585B90B3A4351BEA69E7C07CEBD95 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,4 +51,3 @@ jobs:
           app-name: 'HOS'
           slot-name: 'Production'
           package: .
-          
